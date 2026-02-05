@@ -151,20 +151,25 @@
 
   <script>
     const noBtn = document.getElementById("noBtn");
-    let scale = 1;
+    let scale = 1; // start at normal size
 
     function moveNo() {
+  // move the button to a random position
       const x = Math.random() * (window.innerWidth - 120);
       const y = Math.random() * (window.innerHeight - 80);
-      scale -= 0.1;
-      if (scale < 0.4) scale = 0.4;
-
       noBtn.style.position = "absolute";
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
-      noBtn.style.transform = "scale(" + scale + ")";
-    }
 
+  // shrink the button slightly on each click
+     scale -= 0.1; // reduce by 10% each click
+     if (scale <= 0.1) { 
+       scale = 0;   // button disappears
+       noBtn.style.display = "none"; 
+     } else {
+       noBtn.style.transform = "scale(" + scale + ")";
+     }
+    }
     function yesClicked() {
       document.getElementById("success").style.display = "block";
       document.getElementById("celebrate-img").style.display = "block";
