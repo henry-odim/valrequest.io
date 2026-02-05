@@ -10,7 +10,7 @@
   <style>
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       background: #ffb6c1;
       font-family: 'Press Start 2P', monospace;
       overflow: hidden;
@@ -19,13 +19,14 @@
     .container {
       position: relative;
       z-index: 5;
-      height: 100%;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
       padding: 20px;
+      padding-top: 60px; /* pushes content below mobile browser UI */
     }
 
     h1 {
@@ -41,6 +42,7 @@
       border: 3px solid #000;
       background: white;
       cursor: pointer;
+      z-index: 5;
     }
 
     img.question-img {
@@ -50,9 +52,11 @@
 
     img.no-image {
       display: none;
-      margin-top: 30px;
+      margin-top: 20px;
       width: 90%;
       max-width: 450px;
+      object-fit: contain;
+      z-index: 10;
     }
 
     /* Pixel heart */
@@ -107,7 +111,9 @@
 <body>
 
   <div class="container">
+    <!-- Main GIF at top -->
     <img class="question-img" src="https://media1.tenor.com/m/OfD7XgrZaFcAAAAC/love-bear.gif" alt="Love Bear">
+
     <h1>Are you Henry's beautiful amazing girlfriend?</h1>
 
     <div>
@@ -115,8 +121,8 @@
       <button onclick="showNo()">NO</button>
     </div>
 
-    <img id="noImage" class="no-image"
-         src="IMG_2937.gif">
+    <!-- NO button image appears here -->
+    <img id="noImage" class="no-image" src="IMG_2937.gif" alt="No Response">
   </div>
 
   <script>
