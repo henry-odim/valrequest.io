@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Valentine</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #ff69b4;
+      font-family: 'Press Start 2P', monospace;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      z-index: 5;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 16px;
+      padding: 14px 28px;
+      margin: 10px;
+      border: 3px solid #000;
+      background: white;
+      cursor: pointer;
+    }
+
+    img.question-img {
+      max-width: 300px;
+      margin-bottom: 20px;
+    }
+
+    #success {
+      display: none;
+      margin-top: 20px;
+      font-size: 22px;
+      color: white;
+      animation: pulse 1s infinite alternate;
+    }
+
+    #celebrate-img {
+      display: none;
+      max-width: 300px;
+      margin-top: 20px;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+
+    /* Pixel heart */
+    .pixel-heart {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: red;
+      box-shadow:
+        6px 0 red,
+        18px 0 red,
+        24px 0 red,
+        0 6px red,
+        6px 6px red,
+        12px 6px red,
+        18px 6px red,
+        24px 6px red,
+        6px 12px red,
+        12px 12px red,
+        18px 12px red,
+        12px 18px red;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(110vh); opacity: 1; }
+      to { transform: translateY(-120vh); opacity: 0; }
+    }
+
+    /* Pixel clouds */
+    .cloud {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      box-shadow:
+        18px 0 #fff,
+        36px 0 #fff,
+        9px -9px #fff,
+        27px -9px #fff,
+        9px 9px #fff,
+        27px 9px #fff;
+      opacity: 0.85;
+      animation: drift linear infinite;
+    }
+
+    @keyframes drift {
+      from { transform: translateX(-30vw); }
+      to { transform: translateX(120vw); }
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: hsl(var(--hue), 100%, 60%);
+      border-radius: 2px;
+      opacity: 0.9;
+    }
+
+    .secret {
+      position: absolute;
+      font-size: 8px;
+      color: rgba(255,255,255,0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <img class="question-img" src="https://media1.tenor.com/m/Q9VuGIKQqEMAAAAC/love-bear.gif" alt="Love Bear">
+    <h1>Will you be my Valentine?</h1>
+
+    <div>
+      <button onclick="yesClicked()">YES</button>
+      <button id="noBtn" onclick="moveNo()">NO</button>
+    </div>
+
+    <div id="success">💖 SHE SAID YES 💖</div>
+    <img id="celebrate-img" src="https://i.pinimg.com/originals/64/6a/b8/646ab8725b23bdd046475765e5deffe4.gif" alt="Celebration GIF">
+  </div>
+
+  <audio id="music" src="iris.mp3" loop></audio>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    let scale = 1;
+
+    function moveNo() {
+      const x = Math.random() * (window.innerWidth - 120);
+      const y = Math.random() * (window.innerHeight - 80);
+      scale -= 0.1;
+      if (scale < 0.4) scale = 0.4;
+
+      noBtn.style.position = "absolute";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+      noBtn.style.transform = "scale(" + scale + ")";
+    }
+
+    function yesClicked() {
+      document.getElementById("success").style.display = "block";
+      document.getElementById("celebrate-img").style.display = "block";
+      noBtn.style.display = "none";
+
+      document.getElementById("music").play();
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+
+      for (let i = 0; i < 120; i++) createConfetti();
+    }
+
+    // HEARTS
+    function createHeart() {
+      const h = document.createElement("div");
+      h.className = "pixel-heart";
+      h.style.left = Math.random() * 100 + "vw";
+      const duration = 8 + Math.random() * 4;
+      h.style.animation = `floatUp ${duration}s linear forwards`;
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), duration * 1000);
+    }
+
+    // CLOUDS
+    function createCloud() {
+      const c = document.createElement("div");
+      c.className = "cloud";
+      c.style.top = Math.random() * 40 + "vh";
+      const duration = 18 + Math.random() * 12;
+      c.style.animationDuration = duration + "s";
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), duration * 1000);
+    }
+
+    // CONFETTI
+    function createConfetti() {
+      const c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.top = "-10px";
+      c.style.setProperty("--hue", Math.random() * 360);
+
+      const amplitude = 50 + Math.random() * 50;
+      const frequency = 0.01 + Math.random() * 0.02;
+      let y = -10;
+      const startX = parseFloat(c.style.left);
+
+      const fall = setInterval(() => {
+        y += 4 + Math.random() * 2;
+        const x = startX + amplitude * Math.sin(frequency * y * 10);
+        c.style.top = y + "px";
+        c.style.left = x + "px";
+        if (y > window.innerHeight + 10) {
+          c.remove();
+          clearInterval(fall);
+        }
+      }, 16);
+
+      document.body.appendChild(c);
+    }
+
+    // SECRET "i love you"
+    function secretLove() {
+      const s = document.createElement("div");
+      s.className = "secret";
+      s.innerText = "i love you";
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.top = Math.random() * 100 + "vh";
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 5000);
+    }
+
+    // INIT: hearts, clouds, secret messages
+    createHeart();
+    createCloud();
+    setInterval(createHeart, 250);
+    setInterval(createCloud, 3500);
+    setInterval(secretLove, 5000);
+
+  </script>
+
+</body>
+</html>
